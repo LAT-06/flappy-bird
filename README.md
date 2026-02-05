@@ -26,11 +26,31 @@ pip install -r requirements.txt
 
 ## How to Run
 
+### Locally
+
 Navigate to the project directory and run the following command:
 
 ```bash
 python flappy.py
 ```
+
+### Using Docker
+
+To run the game inside a Docker container (requires an X11 server on the host):
+
+1. **Build the image**:
+   ```bash
+   docker build -t flappybird .
+   ```
+
+2. **Run the container**:
+   ```bash
+   xhost +local:docker # Allow local connections to X server
+   docker run -it --rm \
+     -e DISPLAY=$DISPLAY \
+     -v /tmp/.X11-unix:/tmp/.X11-unix \
+     flappybird
+   ```
 
 ## Controls
 

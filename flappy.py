@@ -19,7 +19,11 @@ PIPE_GAP = 150
 wing = 'assets/audio/wing.wav'
 hit = 'assets/audio/hit.wav'
 
-pygame.mixer.init()
+try:
+    pygame.mixer.init()
+except pygame.error:
+    print("Warning: No audio device found, running without sound.")
+    pygame.mixer.quit() # Ensure it's clean if it partially failed
 
 
 class Bird(pygame.sprite.Sprite):
@@ -162,8 +166,9 @@ while running:
             if event.type == KEYDOWN:
                 if event.key == K_SPACE or event.key == K_UP:
                     bird.bump()
-                    pygame.mixer.music.load(wing)
-                    pygame.mixer.music.play()
+                    if pygame.mixer.get_init():
+                        pygame.mixer.music.load(wing)
+                        pygame.mixer.music.play()
                     begin = False
 
         screen.blit(BACKGROUND, (0, 0))
@@ -199,8 +204,9 @@ while running:
             if event.type == KEYDOWN:
                 if event.key == K_SPACE or event.key == K_UP:
                     bird.bump()
-                    pygame.mixer.music.load(wing)
-                    pygame.mixer.music.play()
+                    if pygame.mixer.get_init():
+                        pygame.mixer.music.load(wing)
+                        pygame.mixer.music.play()
 
         screen.blit(BACKGROUND, (0, 0))
 
@@ -231,8 +237,9 @@ while running:
 
         if (pygame.sprite.groupcollide(bird_group, ground_group, False, False, pygame.sprite.collide_mask) or
                 pygame.sprite.groupcollide(bird_group, pipe_group, False, False, pygame.sprite.collide_mask)):
-            pygame.mixer.music.load(hit)
-            pygame.mixer.music.play()
+            if pygame.mixer.get_init():
+                pygame.mixer.music.load(hit)
+                pygame.mixer.music.play()
             game_over = True
     
     if running:
